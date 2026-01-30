@@ -1,3 +1,16 @@
+# 小説データそのものは公開しない
+novels/*
+
+
+.DS_Store
+.github
+.vscode
+
+*local*
+*epub
+
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

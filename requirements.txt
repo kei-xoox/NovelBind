@@ -1,0 +1,7 @@
+# Webスクレイピング関連
+requests          # サイトへのアクセス
+beautifulsoup4    # HTMLの解析
+
+# EPUB生成関連
+EbookLib          # EPUBファイルの構築
+lxml              # EbookLibが内部で使用する高速解析エンジン
