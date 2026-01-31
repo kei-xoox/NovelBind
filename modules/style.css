@@ -6,15 +6,15 @@ html {
 
 body {
   font-family: "serif", "Hiragino Mincho ProN", "MS Mincho"; /* 明朝体推奨 */
-  line-height: 1.8;
+  line-height: normal;
   text-align: justify; /* 両端揃え */
+  text-orientation: upright;
+  -webkit-text-orientation: upright;
 }
 
-/* 段落の先頭を1文字下げる（なろうの原稿が字下げされていれば不要） */
 p {
   margin: 0;
   padding: 0;
-  text-indent: 1em;
 }
 
 /* 空行の高さ調整 */
@@ -37,27 +37,22 @@ nav {
     -webkit-writing-mode: vertical-rl;
 }
 
-/* 目次(nav)と本文(vrtl)の両方に、文字を立たせる設定を追加 */
 nav, .vrtl {
     writing-mode: vertical-rl;
     -webkit-writing-mode: vertical-rl;
     
-    /* ↓ これが「数字を立たせる」ための決定打です */
     text-orientation: upright;
     -webkit-text-orientation: upright;
 }
-
 
 nav li {
-    /* リンクの文字が横に寝ないように念押し */
     text-orientation: upright;
     -webkit-text-orientation: upright;
 }
-/* 本文と目次の両方に適用されるCSSに追加 */
 .vrtl {
     writing-mode: vertical-rl;
     -webkit-writing-mode: vertical-rl;
-    /* ↓ これが重要：すべての文字（半角含む）を強制的に直立させる */
+    
     text-orientation: upright;
     -webkit-text-orientation: upright;
 }
