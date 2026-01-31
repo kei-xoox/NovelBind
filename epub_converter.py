@@ -68,6 +68,8 @@ def create_epub(ncode_dir):
     )
     book.add_item(style_item)
 
+    book.add_metadata(None, 'meta', '', {'name': 'primary-writing-mode', 'content': 'horizontal-rl'})
+
     chapters = []
     raw_dir = os.path.join(ncode_dir, 'raw')
     raw_files = sorted([f for f in os.listdir(raw_dir) if f.endswith('.html')])
