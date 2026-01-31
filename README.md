@@ -8,6 +8,10 @@
 - 保存されたHTMLファイルからEPUB形式の電子書籍を生成
 - 縦書き表示対応
 
+## はじめに
+
+オンライン小説の電子書籍化ツールとして既に高機能な先行プロジェクトがありますが、自分の環境で動かすのがつらくなってきたので、Pythonのみで動作するシンプルなダウンローダーを目指してして開発を始めました。
+
 ## 使い方
 
 ### 1. 依存関係のインストール
@@ -62,7 +66,7 @@ python epub_converter.py
   - `modules/downloader_base.py`: ダウンローダーの基底クラス。
   - `modules/downloader_narou.py`: なろう小説用のダウンローダークラス。
   - `modules/downloader_kakuyomu.py`: カクヨム小説用のダウンローダークラス。
-  - `modules/style.css`: EPUBに適用されるCSSスタイルシート。
+  - `modules/book-style.css`: EPUBに適用されるCSSスタイルシート。
 - `requirements.txt`: プロジェクトの依存関係を定義します。
 - `novels/`: ダウンロードされた小説データが保存されるディレクトリ。
 
@@ -70,7 +74,7 @@ python epub_converter.py
 
 - コードはPython 3.x で動作します。
 - 新しい小説サイトに対応する場合は、`modules/downloader_base.py` を継承して新しいダウンローダークラスを作成し、`main_downloader.py` にそのサイトの判別ロジックを追加してください。
-- EPUBのスタイルや整形に関する詳細な調整は `modules/style.css` および `epub_converter.py` 内の整形関数 (`_compress_empty_lines`, `_apply_tcy_formatting`) で行えます。
+- EPUBのスタイルや整形に関する詳細な調整は `modules/book-style.css` および `epub_converter.py` 内の整形関数 (`_compress_empty_lines`, `_apply_tcy_formatting`) で行えます。
 
 ## 免責事項
 
