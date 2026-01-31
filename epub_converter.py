@@ -56,17 +56,24 @@ def create_epub(ncode_dir):
     book.set_direction('rtl')
 
     # 1. CSSを「EpubItem」として読み込む
-    css_filename = 'modules/style.css'
-    with open(css_filename, 'r', encoding='utf-8') as f:
-        style_content = f.read()
+    css_files = [
+        'style-reset.css',
+        'style-standard.css',
+        'style-advance.css',
+        'book-style.css'
+    ]
 
-    style_item = epub.EpubItem(
-        uid="style_nav", 
-        file_name="style.css", 
-        media_type="text/css", 
-        content=style_content
-    )
-    book.add_item(style_item)
+    for css_name in css_files:
+        with open(f'modules/{css_name}', 'r', encoding='utf-8') as f:
+            css_content = f.read()
+        
+        css_item = epub.EpubItem(
+            uid=css_name.replace('.', '_'),
+            file_name=f"{css_name}",
+            media_type="text/css",
+            content=css_content
+        )
+        book.add_item(css_item)
 
     book.add_metadata(None, 'meta', '', {'name': 'primary-writing-mode', 'content': 'horizontal-rl'})
 
@@ -104,9 +111,10 @@ def create_epub(ncode_dir):
             lang='ja'
         )
         
-        chapter.add_item(style_item)
+        chapter.body_attrs = "class='vrtl p-text'"
         chapter.content = f'<body class="bodymatter vrtl" epub:type="bodymatter">{processed_body}</body>'
-        
+        chapter.add_link(href="book-style.css", rel="stylesheet", type="text/css")
+
         book.add_item(chapter)
         chapters.append(chapter)
 
@@ -114,11 +122,8 @@ def create_epub(ncode_dir):
     book.add_item(epub.EpubNcx())
 
     nav_page = epub.EpubNav()
-    nav_page.add_item(style_item)
-    
-    # 目次を縦書きに対応させる
-    if nav_page.content:
-        nav_page.content = nav_page.content.replace(b'<body>', b'<body class="vrtl">')
+    nav_page.add_link(href="book-style.css", rel="stylesheet", type="text/css")
+    nav_page.body_attrs = "class='vrtl p-text'"
     book.add_item(nav_page)
     
     book.spine = ['nav'] + chapters
