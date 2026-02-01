@@ -1,7 +1,9 @@
 import os
+import sys
 import re
 import json
 from ebooklib import epub
+from bs4 import BeautifulSoup
 
 def compress_empty_lines(html_str):
     """
@@ -30,17 +32,24 @@ def compress_empty_lines(html_str):
             
     return re.sub(pattern, replacer, html_str)
 
-def apply_tcy(text):
-    """
-    縦中横（TCY）を適用する
-    """
-    # 1. 半角数字 2桁を対象にする (例: 10, 24)
-    text = re.sub(r'(?<!\d)(\d{2})(?!\d)', r'<span class="tcy">\1</span>', text)
+def apply_upright_to_text(html_content):
+    soup = BeautifulSoup(html_content, "html.parser")
     
-    # 2. 感嘆符・疑問符の組み合わせを対象にする (例: !!, !?, ?!, ??)
-    text = re.sub(r'([!?？！]{2})', r'<span class="tcy">\1</span>', text)
-    
-    return text
+    # テキストノード（人間が読む文字）だけを抽出してループ
+    for text_node in soup.find_all(string=True):
+        # 親タグが script や style の場合は除外（念のため）
+        if text_node.parent.name in ['script', 'style']:
+            continue
+            
+        # 半角英数字を見つける正規表現
+        new_text = re.sub(r'([a-zA-Z0-9]+)', r'<span class="upright">\1</span>', text_node)
+        
+        # 置換が発生した場合のみ、テキストノードをHTMLとして差し替える
+        if new_text != text_node:
+            text_node.replace_with(BeautifulSoup(new_text, "html.parser"))
+            
+    # bodyの中身だけを文字列として返す
+    return str(soup)
 
 def create_epub(ncode_dir):
     metadata_path = os.path.join(ncode_dir, 'metadata.json')
@@ -103,6 +112,7 @@ def create_epub(ncode_dir):
         # もしHTML本文内に既に<h2>が含まれているなら、二重にならないよう調整
         # (必要に応じて apply_tcy などを適用)
         processed_body = compress_empty_lines(html_content)
+        processed_body = apply_upright_to_text(processed_body)  
 
         # EpubHtmlの作成 (titleに新しい整形済みタイトルを指定)
         chapter = epub.EpubHtml(
@@ -138,8 +148,13 @@ def create_epub(ncode_dir):
     return output_filename
 
 if __name__ == "__main__":
-    # ダウンロードしたフォルダパスを指定
-    target_dir = input("フォルダ名を入力してください: ").strip()
+    if len(sys.argv) > 1:
+        target_dir = sys.argv[1]
+        print(f"引数からフォルダ名を読み込みました: {target_dir}")
+    else:
+        # ダウンロードしたフォルダパスを指定
+        target_dir = input("フォルダ名を入力してください: ").strip()
+
     if os.path.exists(target_dir):
         create_epub(target_dir)
     else:
