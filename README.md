@@ -2,6 +2,8 @@
 
 このツールは、指定されたオンライン小説（なろう、カクヨム）をダウンロードし、EPUB形式に変換するためのPythonスクリプトです。
 
+[<img src="./docs/sample_viewer.png" width="200">](./docs/sample_viewer.png)
+
 ## 機能
 
 - なろう (syosetu.com) およびカクヨム (kakuyomu.jp) から小説をダウンロード
@@ -49,7 +51,7 @@ EPUBに表紙を付けたい場合は、実行前にプロジェクトのルー�
 
 ### 3. ダウンロードのみ行う (オプション)
 
-ダウンロードのみ行い、EPUB作成を行わない場合は、`main_downloader.py` を直接実行てください。
+ダウンロードのみ行い、EPUB作成を行わない場合は、`main_downloader.py` を直接実行してください。
 
 ```bash
 python main_downloader.py
