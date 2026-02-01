@@ -10,6 +10,7 @@ novels/*
 *epub
 inner/*
 sample/*
+*jpg
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -91,6 +91,16 @@ def create_epub(ncode_dir):
     book.add_author(meta['author'])
     book.set_direction('rtl')
 
+    # --- 表紙の設定 ---
+    cover_path = 'cover.jpg' 
+
+    if os.path.exists(cover_path):
+        # 画像ファイルをEPUBに登録
+        book.set_cover("cover.jpg", open(cover_path, 'rb').read())
+        print("表紙画像を設定しました。")
+    else:
+        print(f"{cover_path} が見つからないため、表紙はスキップします。")
+
     # 1. CSSを「EpubItem」として読み込む
     css_files = [
         'style-reset.css',
@@ -165,7 +175,7 @@ def create_epub(ncode_dir):
     nav_page.body_attrs = "class='vrtl p-text'"
     book.add_item(nav_page)
     
-    book.spine = [title_page, 'nav'] + chapters
+    book.spine = ['cover', title_page, 'nav'] + chapters
     book.page_progression_direction = 'rtl'
 
     output_filename = f"{meta['title']}.epub".replace(' ', '_')
