@@ -298,11 +298,27 @@ body.p-text .main {
 
 /* 本扉ページ
 ---------------------------------------------------------------- */
-body.p-titlepage {
-}
-body.p-titlepage .main {
+.p-titlepage.hltr {
+    writing-mode: horizontal-tb;
+    -webkit-writing-mode: horizontal-tb;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
+.p-titlepage__title {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 1em;
+}
+
+.p-titlepage__author {
+    font-size: 1.2em;
+}
 
 /* 奥付ページ
 ---------------------------------------------------------------- */

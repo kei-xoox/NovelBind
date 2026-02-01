@@ -51,6 +51,33 @@ def apply_upright_to_text(html_content):
     # bodyの中身だけを文字列として返す
     return str(soup)
 
+def create_titlepage(book, meta):
+    # 扉用のHTMLを作成
+    title_page = epub.EpubHtml(
+        title='扉',
+        file_name='titlepage.xhtml',
+        lang='ja'
+    )
+    
+    # コンテンツの構成
+    title_page.content = f'''
+        <div class="p-titlepage hltr">
+            <div class="main">
+                <div class="book-title">
+                    <h1 class="p-titlepage__title">{meta['title']}</h1>
+                </div>
+                <div class="author">
+                    <p class="p-titlepage__author">{meta['author']}</p>
+                </div>
+            </div>
+        </div>
+    '''
+    
+    # スタイルシートをリンク
+    title_page.add_link(href="book-style.css", rel="stylesheet", type="text/css")
+    
+    return title_page
+
 def create_epub(ncode_dir):
     metadata_path = os.path.join(ncode_dir, 'metadata.json')
     with open(metadata_path, "r", encoding="utf-8") as f:
@@ -121,13 +148,15 @@ def create_epub(ncode_dir):
             lang='ja'
         )
         
-        chapter.body_attrs = "class='vrtl p-text'"
         chapter.content = f'<body class="bodymatter vrtl" epub:type="bodymatter">{processed_body}</body>'
         chapter.add_link(href="book-style.css", rel="stylesheet", type="text/css")
 
         book.add_item(chapter)
         chapters.append(chapter)
 
+    # 扉ページを作成
+    title_page = create_titlepage(book, meta)
+    book.add_item(title_page)
     book.toc = tuple(chapters)
     book.add_item(epub.EpubNcx())
 
@@ -136,7 +165,7 @@ def create_epub(ncode_dir):
     nav_page.body_attrs = "class='vrtl p-text'"
     book.add_item(nav_page)
     
-    book.spine = ['nav'] + chapters
+    book.spine = [title_page, 'nav'] + chapters
     book.page_progression_direction = 'rtl'
 
     output_filename = f"{meta['title']}.epub".replace(' ', '_')
