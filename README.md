@@ -49,7 +49,7 @@ EPUBに表紙を付けたい場合は、実行前にプロジェクトのルー�
 
 ### 3. ダウンロードのみ行う (オプション)
 
-ダウンロードのみ行い、EPUB作成を行わない場合は、`main_downloader.py` を直接実行てください。
+ダウンロードのみ行い、EPUB作成を行わない場合は、`main_downloader.py` を直接実行してください。
 
 ```bash
 python main_downloader.py
